@@ -26,6 +26,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     const appointmentCollection = client.db("doctorsPortal").collection("appointments");
     const doctorCollection = client.db("doctorsPortal").collection("doctors");
+    const blogCollection = client.db("doctorsPortal").collection("blogs");
 
 
     app.post('/addAppointment', (req, res) => {
@@ -104,6 +105,55 @@ client.connect(err => {
                 res.send(doctors.length > 0);
             })
     })
+
+
+
+    // add blogs
+
+    app.post('/addABlog', (req, res) => {
+        const file = req.files.file;
+        const name = req.body.name;
+        const title = req.body.title;
+        const link = req.body.link;
+        const date = req.body.date;
+        const description = req.body.description;
+        const newImg = file.data;
+        const encImg = newImg.toString('base64');
+
+        const image = {
+            contentType: req.files.file.mimetype,
+            size: req.files.file.size,
+            img: Buffer.from(encImg, 'base64')
+        };
+
+        blogCollection.insertOne({ name, title, image, link, description, date })
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+    })
+
+
+
+    app.get('/blogs', (req, res) => {
+        doctorCollection.find({})
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
+    });
+
+
+
+
+    // app.post('/isDoctor', (req, res) => {
+    //     const email = req.body.email;
+    //     doctorCollection.find({ email: email })
+    //         .toArray((err, doctors) => {
+    //             res.send(doctors.length > 0);
+    //         })
+    // })
+
+
+
 
 });
 
