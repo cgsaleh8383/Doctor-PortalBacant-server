@@ -135,7 +135,7 @@ client.connect(err => {
 
 
     app.get('/blogs', (req, res) => {
-        doctorCollection.find({})
+        blogCollection.find({})
             .toArray((err, documents) => {
                 res.send(documents);
             })
@@ -144,13 +144,13 @@ client.connect(err => {
 
 
 
-    // app.post('/isDoctor', (req, res) => {
-    //     const email = req.body.email;
-    //     doctorCollection.find({ email: email })
-    //         .toArray((err, doctors) => {
-    //             res.send(doctors.length > 0);
-    //         })
-    // })
+    app.post('/isBlogs', (req, res) => {
+        const email = req.body.email;
+        blogCollection.find({ email: email })
+            .toArray((err, doctors) => {
+                res.send(doctors.length > 0);
+            })
+    })
 
 
 
