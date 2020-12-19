@@ -114,7 +114,7 @@ client.connect(err => {
         const file = req.files.file;
         const name = req.body.name;
         const title = req.body.title;
-        const link = req.body.link;
+        const id = req.body.id;
         const date = req.body.date;
         const description = req.body.description;
         const newImg = file.data;
@@ -126,7 +126,7 @@ client.connect(err => {
             img: Buffer.from(encImg, 'base64')
         };
 
-        blogCollection.insertOne({ name, title, image, link, description, date })
+        blogCollection.insertOne({ name, title, image, id, description, date })
             .then(result => {
                 res.send(result.insertedCount > 0);
             })
